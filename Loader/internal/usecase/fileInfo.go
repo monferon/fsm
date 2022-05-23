@@ -11,7 +11,7 @@ type FileInfoUseCase struct {
 	webAPI FileInfoWebAPI
 }
 
-func New(w *repo.Repo, r *webapi.FileInfoWebAPI) *FileInfoUseCase {
+func New(r *repo.Repo, w *webapi.FileInfoWebAPI) *FileInfoUseCase {
 	return &FileInfoUseCase{
 		webAPI: w,
 		repo:   r,

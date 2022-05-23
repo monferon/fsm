@@ -4,25 +4,21 @@ import (
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/monferon/fsm/loader/internal/usecase"
+	file "github.com/monferon/fsm/loader/pkg/grpc"
 	"io"
 	"net/http"
 	"os"
 )
 
 type fileRoutes struct {
-	t *usecase.FileInfoUseCase
+	t  *usecase.FileInfoUseCase
+	gc file.SenderClient
 	//l logger.Interface
 }
 
-func newFileRoutes(e *echo.Group, f *usecase.FileInfoUseCase) {
-	r := &fileRoutes{f}
+func newFileRoutes(e *echo.Group, f *usecase.FileInfoUseCase, gc file.SenderClient) {
+	r := &fileRoutes{f, gc}
 
-	//h := handler.Group("/translation")
-	//{
-	//	h.GET("/history", r.history)
-	//	h.POST("/do-translate", r.doTranslate
-	//	ee.POST("/upload", upload))
-	//}
 	ee := e.Group("/v1")
 	{
 		//newFileRoutes(ee, f)
