@@ -1,0 +1,19 @@
+app:
+  name: 's3uploader'
+  version: '1.0.0'
+
+http:
+  port: '8081'
+
+logger:
+  log_level: 'debug'
+  rollbar_env: 'go-clean-template'
+
+s3:
+  endpoint: ''
+  accessKeyID: ''
+  secretAccessKey: ''
+  useSSL : false
+
+kafka:
+  url: ''

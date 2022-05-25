@@ -5,9 +5,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/monferon/fsm/loader/internal/usecase"
 	file "github.com/monferon/fsm/loader/pkg/grpc"
-	"io"
+	"io/ioutil"
 	"net/http"
-	"os"
 )
 
 type fileRoutes struct {
@@ -21,7 +20,6 @@ func newFileRoutes(e *echo.Group, f *usecase.FileInfoUseCase, gc file.SenderClie
 
 	ee := e.Group("/v1")
 	{
-		//newFileRoutes(ee, f)
 		ee.POST("/upload", r.upload)
 	}
 }
@@ -33,23 +31,18 @@ func (f *fileRoutes) upload(c echo.Context) error {
 		return err
 	}
 	src, err := file.Open()
+
 	if err != nil {
 		return err
 	}
 	defer src.Close()
 
-	// Destination
-	dst, err := os.Create(file.Filename)
+	content, err := ioutil.ReadAll(src)
 	if err != nil {
 		return err
 	}
-	defer dst.Close()
-
-	// Copy
-	if _, err = io.Copy(dst, src); err != nil {
-		return err
-	}
-
+	fmt.Println(content)
+	f.gc.Send(c)
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully.</p>", file.Filename))
 	//translations, err := r.t.History(c.Request.Context())
 	//if err != nil {
@@ -60,5 +53,4 @@ func (f *fileRoutes) upload(c echo.Context) error {
 	//}
 	//
 	//c.JSON(http.StatusOK, historyResponse{translations})
-	return nil
 }
