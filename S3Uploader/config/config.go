@@ -32,13 +32,15 @@ type (
 		Level string `env-required:"true" yaml:"log_level"   env:"LOG_LEVEL"`
 	}
 
-	// PG -.
+	// S3 -.
 	S3 struct {
-		url             string `env-required:"true" yaml:"url" env:"S3_URL"`
-		accessKeyID     string `env-required:"true" yaml:"accessKeyID"               env:"S3_ID"`
-		secretAccessKey string `env-required:"true" yaml:"secretAccessKey"               env:"S3_KEY"`
-		useSSL          bool   `env-required:"true" yaml:"useSSL"               env:"USE_SSL"`
+		URL             string `env-required:"true" yaml:"url" env:"S3_URL"`
+		AccessKeyID     string `env-required:"true" yaml:"accessKeyID"               env:"S3_ID"`
+		SecretAccessKey string `env-required:"true" yaml:"secretAccessKey"               env:"S3_KEY"`
+		UseSSL          bool   `env-required:"true" yaml:"useSSL"               env:"USE_SSL"`
 	}
+
+	//Kafka -.
 	Kafka struct {
 		url string `env-required:"true" yaml:"url" env:"KAFKA_URL"`
 	}

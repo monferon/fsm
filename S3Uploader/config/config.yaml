@@ -10,7 +10,7 @@ logger:
   rollbar_env: 'go-clean-template'
 
 s3:
-  endpoint: ''
+  url: ''
   accessKeyID: ''
   secretAccessKey: ''
   useSSL : false

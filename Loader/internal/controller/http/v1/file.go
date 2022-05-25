@@ -42,7 +42,7 @@ func (f *fileRoutes) upload(c echo.Context) error {
 		return err
 	}
 	fmt.Println(content)
-	f.gc.Send(c)
+	//f.gc.Send(c)
 	return c.HTML(http.StatusOK, fmt.Sprintf("<p>File %s uploaded successfully.</p>", file.Filename))
 	//translations, err := r.t.History(c.Request.Context())
 	//if err != nil {
