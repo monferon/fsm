@@ -1,15 +1,9 @@
 package file
 
 import (
-	"io"
-	"os"
-	"time"
-
 	//"github.com/cirocosta/gupload/messaging"
 	"github.com/pkg/errors"
-	//"github.com/rs/zerolog"
-	//"github.com/monferon/loader/pkg/grpc"
-	"golang.org/x/net/context"
+
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
@@ -92,80 +86,80 @@ func NewClientGRPC(cfg ClientGRPCConfig) (c ClientGRPC, err error) {
 	return
 }
 
-func (c *ClientGRPC) UploadFile(ctx context.Context, f string) (stats Stats, err error) {
-	var (
-		writing = true
-		buf     []byte
-		n       int
-		file    *os.File
-		status  *UploadStatus
-	)
-
-	file, err = os.Open(f)
-	if err != nil {
-		err = errors.Wrapf(err,
-			"failed to open file %s",
-			f)
-		return
-	}
-	defer file.Close()
-
-	stream, err := c.client.Send(ctx)
-	if err != nil {
-		err = errors.Wrapf(err,
-			"failed to create upload stream for file %s",
-			f)
-		return
-	}
-	defer stream.CloseSend()
-
-	stats.StartedAt = time.Now()
-	buf = make([]byte, c.chunkSize)
-	for writing {
-		n, err = file.Read(buf)
-		if err != nil {
-			if err == io.EOF {
-				writing = false
-				err = nil
-				continue
-			}
-
-			err = errors.Wrapf(err,
-				"errored while copying from file to buf")
-			return
-		}
-
-		err = stream.Send(&messaging.Chunk{
-			Content: buf[:n],
-		})
-		if err != nil {
-			err = errors.Wrapf(err,
-				"failed to send chunk via stream")
-			return
-		}
-	}
-
-	stats.FinishedAt = time.Now()
-
-	status, err = stream.CloseAndRecv()
-	if err != nil {
-		err = errors.Wrapf(err,
-			"failed to receive upstream status response")
-		return
-	}
-
-	if status.Code != messaging.UploadStatusCode_Ok {
-		err = errors.Errorf(
-			"upload failed - msg: %s",
-			status.Message)
-		return
-	}
-
-	return
-}
-
-func (c *ClientGRPC) Close() {
-	if c.conn != nil {
-		c.conn.Close()
-	}
-}
+//func (c *ClientGRPC) UploadFile(ctx context.Context, f string) (stats Stats, err error) {
+//	var (
+//		writing = true
+//		buf     []byte
+//		n       int
+//		file    *os.File
+//		status  *UploadStatus
+//	)
+//
+//	file, err = os.Open(f)
+//	if err != nil {
+//		err = errors.Wrapf(err,
+//			"failed to open file %s",
+//			f)
+//		return
+//	}
+//	defer file.Close()
+//
+//	stream, err := c.client.Send(ctx)
+//	if err != nil {
+//		err = errors.Wrapf(err,
+//			"failed to create upload stream for file %s",
+//			f)
+//		return
+//	}
+//	defer stream.CloseSend()
+//
+//	stats.StartedAt = time.Now()
+//	buf = make([]byte, c.chunkSize)
+//	for writing {
+//		n, err = file.Read(buf)
+//		if err != nil {
+//			if err == io.EOF {
+//				writing = false
+//				err = nil
+//				continue
+//			}
+//
+//			err = errors.Wrapf(err,
+//				"errored while copying from file to buf")
+//			return
+//		}
+//
+//		err = stream.Send(&messaging.Chunk{
+//			Content: buf[:n],
+//		})
+//		if err != nil {
+//			err = errors.Wrapf(err,
+//				"failed to send chunk via stream")
+//			return
+//		}
+//	}
+//
+//	stats.FinishedAt = time.Now()
+//
+//	status, err = stream.CloseAndRecv()
+//	if err != nil {
+//		err = errors.Wrapf(err,
+//			"failed to receive upstream status response")
+//		return
+//	}
+//
+//	if status.Code != messaging.UploadStatusCode_Ok {
+//		err = errors.Errorf(
+//			"upload failed - msg: %s",
+//			status.Message)
+//		return
+//	}
+//
+//	return
+//}
+//
+//func (c *ClientGRPC) Close() {
+//	if c.conn != nil {
+//		c.conn.Close()
+//	}
+//}

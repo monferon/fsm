@@ -10,6 +10,7 @@ import (
 	"github.com/monferon/fsm/loader/internal/usecase/repo"
 	"github.com/monferon/fsm/loader/internal/usecase/webapi"
 	file "github.com/monferon/fsm/loader/pkg/grpc"
+	"github.com/monferon/fsm/loader/pkg/logger"
 	"github.com/monferon/fsm/loader/pkg/postgres"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -26,8 +27,10 @@ var (
 )
 
 func Run(cfg *config.Config) {
-
+	//logger
+	l := logger.New()
 	//database
+	l.Info("dtatuti", "test-test-test")
 	pg, err := postgres.New(cfg.PG.URL)
 	if err != nil {
 		fmt.Println(err)
